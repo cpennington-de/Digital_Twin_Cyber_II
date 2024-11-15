@@ -1,0 +1,12 @@
+Subject: [Action Required] Your Email Will Be Deactivated Soon
+From: mailadmin@yourdomain-support.com
+Body:
+Dear [User],
+Your mailbox has exceeded its allocated storage limit. As a result, you are unable to receive new messages. To prevent permanent account deactivation, you must verify your storage usage.
+If no action is taken within the next 48 hours, your account may be permanently disabled, and all stored data could be lost. Please confirm your email storage by following the link below:
+Renew Storage
+Our team is here to support you. If you have questions, please reach out to our help desk at 1-800-555-6789.
+Regards,
+Email Administration Team
+Technical Support
+Disclaimer: This is an automated message. Do not reply to this email.
