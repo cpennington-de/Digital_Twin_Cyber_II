@@ -9,20 +9,35 @@ document.getElementById('readText').addEventListener('click', function() {
       if (results && results[0] && results[0].result) {
         const url = results[0].result;
 
-        // Send the URL to the Python server
-        fetch('http://127.0.0.1:5000/process_text', {
+        // First extract URL features
+        fetch('http://localhost:5000/extract-features', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
-          body: JSON.stringify({ text: url })
+          body: JSON.stringify({ url })
+        })
+        .then(response => response.json())
+        .then(features => {
+          // Display the extracted features
+          displayFeatures(features);
+
+          // After features are extracted, send for phishing check
+          return fetch('http://127.0.0.1:5000/process_text', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text: url, features: features })
+          });
         })
         .then(response => response.json())
         .then(data => {
           // Display True/False in the popup
           //Will change to reflect the outcome of the model instead of the url containing google
           if (data.contains_google) {
-            document.getElementById('content').innerText = 'This website might be a Phishing attmpet!';
+            document.getElementById('content').innerText = 'This website might be a Phishing attempt!';
           } else {
             document.getElementById('content').innerText = 'This website appears to be safe.';
           }
@@ -37,6 +52,51 @@ document.getElementById('readText').addEventListener('click', function() {
     });
   });
 });
+
+// Test Features button for debugging feature extraction
+document.getElementById('testFeatures').addEventListener('click', function() {
+  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+    chrome.scripting.executeScript({
+      target: { tabId: tabs[0].id },
+      func: getPageURL
+    }, (results) => {
+      if (results && results[0] && results[0].result) {
+        const url = results[0].result;
+        
+        fetch('http://localhost:5000/extract-features', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ url })
+        })
+        .then(response => response.json())
+        .then(features => displayFeatures(features))
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('results').innerText = 'Error extracting features';
+        });
+      }
+    });
+  });
+});
+
+// Helper function to display features in results div
+function displayFeatures(features) {
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '';
+  
+  Object.entries(features).forEach(([key, value]) => {
+    const featureDiv = document.createElement('div');
+    featureDiv.className = 'feature';
+    featureDiv.innerHTML = `
+      <span>${key}:</span>
+      <span>${value}</span>
+    `;
+    resultsDiv.appendChild(featureDiv);
+  });
+}
 
 // Close button functionality
 document.getElementById('closeButton').addEventListener('click', function() {

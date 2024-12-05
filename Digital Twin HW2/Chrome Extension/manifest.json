@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "A simple Digital Twin",
     "version": "1.0",
-    "description": "An extenstion that can extract information from the website the user and determine if it is a fishing website",
+    "description": "An extenstion that can extract information from the website the user is on and determine if it is a phishing website",
     "permissions": [
       "activeTab", 
       "scripting"

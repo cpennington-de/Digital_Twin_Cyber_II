@@ -1,0 +1,2 @@
+qty_ip_resolved,ttl_hostname,qty_nameservers,qty_mx_servers,time_domain_activation,time_domain_expiration,time_response,qty_redirects,tls_ssl_certificate,server_client_domain,domain_spf,url_shortened
+1,60,8,5,0,0,0.514358,0,1,0,True,False
