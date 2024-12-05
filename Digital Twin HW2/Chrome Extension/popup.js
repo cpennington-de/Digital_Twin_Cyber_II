@@ -4,30 +4,35 @@ document.getElementById('readText').addEventListener('click', function() {
     // Use the scripting API to execute a script in the active tab
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id },
-      func: getPageText
+      func: getPageURL
     }, (results) => {
       if (results && results[0] && results[0].result) {
-        const text = results[0].result;
+        const url = results[0].result;
 
-        // Send the text to the Python server
+        // Send the URL to the Python server
         fetch('http://127.0.0.1:5000/process_text', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ text: text })
+          body: JSON.stringify({ text: url })
         })
         .then(response => response.json())
         .then(data => {
-          // Display the processed text in the popup, using innerHTML to allow HTML rendering
-          document.getElementById('content').innerHTML = data.processed_text;
+          // Display True/False in the popup
+          //Will change to reflect the outcome of the model instead of the url containing google
+          if (data.contains_google) {
+            document.getElementById('content').innerText = 'This website might be a Phishing attmpet!';
+          } else {
+            document.getElementById('content').innerText = 'This website appears to be safe.';
+          }
         })
         .catch(error => {
           console.error('Error:', error);
           document.getElementById('content').innerText = 'Error processing text. Is the Python Server running?';
         });
       } else {
-        document.getElementById('content').innerText = 'No text found.';
+        document.getElementById('content').innerText = 'No URL found.';
       }
     });
   });
@@ -43,15 +48,7 @@ function getPageText() {
   return document.body.innerText;
 }
 
-document.getElementById("readText").addEventListener("click", () => {
-  const color = document.getElementById("colorPicker").value;
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      func: (color) => {
-        document.body.style.backgroundColor = color;
-      },
-      args: [color]
-    });
-  });
-});
+// This function returns the URL of the current page
+function getPageURL() {
+  return window.location.href;
+}

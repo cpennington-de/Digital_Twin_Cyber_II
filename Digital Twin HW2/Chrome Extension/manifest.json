@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Read Text on Screen",
+    "name": "A simple Digital Twin",
     "version": "1.0",
-    "description": "A simple extension that reads and displays all text on the current page.",
+    "description": "An extenstion that can extract information from the website the user and determine if it is a fishing website",
     "permissions": [
       "activeTab", 
       "scripting"
