@@ -28,9 +28,28 @@
       border-radius: 5px;
       padding: 10px;
       font-size: 14px;
-      white-space: pre-wrap; /* Keep line breaks */
+      white-space: pre-wrap;
       height: 100px;
-      overflow-y: auto; /* Scroll if content is too long */
+      overflow-y: auto;
+    }
+
+    #results {
+      margin-top: 10px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 12px;
+      height: 200px;
+      overflow-y: auto;
+    }
+
+    .feature {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      padding: 4px;
+      background-color: #f8f9fa;
     }
 
     button {
@@ -59,15 +78,25 @@
     #closeButton:hover {
       background-color: #b02a37;
     }
+
+    #testFeatures {
+      background-color: #28a745;
+    }
+
+    #testFeatures:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
   <h1>Phishing Detection Helper</h1>
   
   <button id="readText">Phishing Detection</button>
+  <button id="testFeatures">Test Feature Extraction</button>
   <button id="closeButton">Close</button>
   
   <div id="content">Results will be displayed here.</div>
+  <div id="results"></div>
   
   <script src="popup.js"></script>
 </body>
