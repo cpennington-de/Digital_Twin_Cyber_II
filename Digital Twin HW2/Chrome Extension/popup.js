@@ -10,7 +10,7 @@ document.getElementById('readText').addEventListener('click', function() {
         const url = results[0].result;
 
         // First extract URL features
-        fetch('http://localhost:5000/extract-features', {
+        fetch('http://127.0.0.1:5000/extract-features', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ document.getElementById('testFeatures').addEventListener('click', function() {
       if (results && results[0] && results[0].result) {
         const url = results[0].result;
         
-        fetch('http://localhost:5000/extract-features', {
+        fetch('http://127.0.0.1:5000/extract-features', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
