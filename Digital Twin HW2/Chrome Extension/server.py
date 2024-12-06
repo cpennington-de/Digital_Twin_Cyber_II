@@ -9,6 +9,7 @@ import requests
 import socket
 import ssl
 from datetime import datetime
+import joblib
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for the entire app
@@ -90,6 +91,8 @@ def extract_features(url):
     
     return features
 
+model = joblib.load('/Users/colinpennington/Documents/GitHub/Digital_Twin_Cyber_II/Digital Twin HW2/Chrome Extension/decision_tree_with_knn_features.pkl')
+
 @app.route('/extract-features', methods=['POST'])
 def extract_url_features():
     try:
@@ -109,21 +112,66 @@ def extract_url_features():
         print(f"Error: {str(e)}")
         return jsonify({'error': str(e)}), 500
         
+
+
 def Phishing_Detection_Model(Extracted_DATA):
-    #put in the code for the chose phsihing detection model
-    #the output of the function should return a True or fast value 
-    #based on whether the data shows the website is a phishing website or not
-        return True
+    try:
+        # Ensure the DataFrame matches the input format of the model
+        prediction = model.predict(Extracted_DATA)
+        
+        # Return True if the site is predicted as phishing (1), otherwise False
+        return bool(prediction[0])
+    except Exception as e:
+        print(f"Error in model prediction: {str(e)}")
+        return False  # Default to non-phishing in case of an error
 
 
 # This function runs each time a piece of text is posted to the server
 # It now returns True if "Google" is in the text and False otherwise
+model = joblib.load('/Users/colinpennington/Documents/GitHub/Digital_Twin_Cyber_II/Digital Twin HW2/Chrome Extension/decision_tree_with_knn_features.pkl')
+
 @app.route('/process_text', methods=['POST'])
 def process_text():
-    data = request.get_json()
-    text = data.get('text', '')
-    contains_google = "bing" in text  # Check if "Google" is in the text
-    return jsonify({"contains_google": contains_google})
+    try:
+        data = request.get_json()
+        url = data.get('url')
+        if not url:
+            return jsonify({'error': 'URL is required'}), 400
+        
+        features = extract_features(url)  # Assume this function extracts features correctly
+        if features:
+            extracted_features = pd.DataFrame([features])
+            extracted_features.to_csv('url_features.csv', index=False)
+            
+            # Pass the extracted features to the phishing detection model
+            prediction = Phishing_Detection_Model(extracted_features)
+            
+            # Return the prediction along with the features
+            return jsonify({
+                'features': features,
+                'is_phishing': prediction
+            })
+        else:
+            return jsonify({'error': 'Failed to extract features'}), 500
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+def Phishing_Detection_Model(Extracted_DATA):
+    
+    try:
+        # Ensure the DataFrame matches the input format of the model
+        prediction = model.predict(Extracted_DATA)
+        
+        # Return True if the site is predicted as phishing (1), otherwise False
+        return bool(prediction[0])
+    except Exception as e:
+        print(f"Error in model prediction: {str(e)}")
+        return False  # Default to non-phishing in case of an error
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)  # Runs on http://127.0.0.1:5000
+
+
+
+
