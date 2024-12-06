@@ -2,21 +2,25 @@ import pandas as pd
 import statsmodels.api as sm
 from statsmodels.tools.tools import add_constant
 
-# Step 1: Load the dataset
-data = pd.read_csv('dataset_full.csv')
+# Specify the CSV file path
+csv_file = '/Users/colinpennington/Documents/GitHub/Digital_Twin_Cyber_II/Digital Twin HW2/DTClassifier/dataset_full.csv'
+
+# Import the CSV file into a pandas DataFrame
+data = pd.read_csv(csv_file)
 
 # Step 2: Define your dependent variable (y) and independent variables (X)
-y = data['target_column']  # Replace with your target column name
-X = data.drop(columns=['target_column'])  # Drop the target column from your independent variables
+y = data['phishing']  # Replace with your target column name
+X = data.drop(columns=['phishing'])  # Drop the target column from your independent variables
 
 # Step 3: Add a constant to the independent variables matrix (for the intercept)
 X = add_constant(X)
 
-# Step 4: Stepwise selection function
+# Step 4: Stepwise selection function with a limit of 15 variables
 
-def stepwise_selection(X, y, threshold_in=0.05, threshold_out=0.10):
+def stepwise_selection(X, y, threshold_in=0.05, threshold_out=0.10, max_features=15):
     """
-    Performs stepwise regression (both forward and backward) based on AIC
+    Performs stepwise regression (both forward and backward) based on AIC,
+    with a limit on the number of variables included.
     """
     initial_features = X.columns.tolist()
     best_model = sm.OLS(y, X).fit()  # Initial model
@@ -32,7 +36,7 @@ def stepwise_selection(X, y, threshold_in=0.05, threshold_out=0.10):
             new_pval[new_column] = model.pvalues[new_column]
 
         best_pval = new_pval.min()
-        if best_pval < threshold_in:
+        if best_pval < threshold_in and len(included) < max_features:
             best_feature = new_pval.idxmin()
             included.append(best_feature)
 
@@ -48,6 +52,10 @@ def stepwise_selection(X, y, threshold_in=0.05, threshold_out=0.10):
         # Break if no features are added or removed
         if best_pval >= threshold_in and worst_pval <= threshold_out:
             break
+
+    # Limit the included features to max_features
+    if len(included) > max_features:
+        included = included[:max_features]
 
     return included
 
