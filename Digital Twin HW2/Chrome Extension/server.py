@@ -77,7 +77,7 @@ def extract_features(url):
 
     return features
 
-model = joblib.load('Random_Forest_Classifiers.pkl')
+model = joblib.load('Digital Twin HW2\Chrome Extension\Random_Forest_Classifiers.pkl')
 
 
 
@@ -117,7 +117,7 @@ def Phishing_Detection_Model(Extracted_DATA):
 
 # This function runs each time a piece of text is posted to the server
 # It now returns True if "Google" is in the text and False otherwise
-model = joblib.load('/Users/colinpennington/Documents/GitHub/Digital_Twin_Cyber_II/Digital Twin HW2/Chrome Extension/decision_tree_with_knn_features.pkl')
+model = joblib.load('Digital Twin HW2\Chrome Extension\decision_tree_with_knn_features.pkl')
 
 @app.route('/process_text', methods=['POST'])
 def process_text():
