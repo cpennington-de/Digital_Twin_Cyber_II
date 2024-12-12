@@ -91,7 +91,9 @@ def extract_features(url):
     
     return features
 
-model = joblib.load('/Users/colinpennington/Documents/GitHub/Digital_Twin_Cyber_II/Digital Twin HW2/Chrome Extension/decision_tree_with_knn_features.pkl')
+model = joblib.load('decision_tree_with_knn_features.pkl')
+
+
 
 @app.route('/extract-features', methods=['POST'])
 def extract_url_features():
