@@ -1,2 +1,2 @@
-qty_ip_resolved,ttl_hostname,qty_nameservers,qty_mx_servers,time_domain_activation,time_domain_expiration,time_response,qty_redirects,tls_ssl_certificate,server_client_domain,domain_spf,url_shortened
-0,0,0,0,0,0,0.167225,0,1,0,0,False
+length_url,domain_length,qty_plus_directory,directory_length,qty_slash_directory,qty_hyphen_directory,qty_tilde_directory,qty_at_directory,qty_and_directory,file_length,qty_dot_file,qty_hyphen_file,qty_plus_file,qty_equal_file,email_in_url,qty_ip_resolved,ttl_hostname,time_domain_activation,time_domain_expiration,time_response,qty_redirects
+55,10,0,37,2,1,0,0,0,21,0,1,0,0,0,1,34,0,0,0.605627,0
