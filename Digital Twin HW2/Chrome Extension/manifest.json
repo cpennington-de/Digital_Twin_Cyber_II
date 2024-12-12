@@ -5,8 +5,10 @@
     "description": "An extenstion that can extract information from the website the user is on and determine if it is a phishing website",
     "permissions": [
       "activeTab", 
-      "scripting"
+      "scripting",
+      "http://127.0.0.1/*"
     ],
+    "host_permissions": ["http://127.0.0.1/*"],
     "action": {
       "default_popup": "popup.html",
       "default_icon": {
