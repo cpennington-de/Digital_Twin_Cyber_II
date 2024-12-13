@@ -82,7 +82,7 @@ def extract_selected_features(url):
 #print(extract_selected_features("https://github.com/cpennington-de/Digital_Twin_Cyber_II/pull/4"))
 
 
-URL = "https://learn.uark.edu/ultra/stream"
+URL = "https://www.bing.com/"
 
 Features_df = pd.DataFrame([extract_selected_features(URL)])
 
@@ -104,4 +104,5 @@ prediction = Phishing_Detection_Model(Features_df)
 
 # Example usage
 print(prediction)
+print(bool(prediction))
 #print(extract_features("http://results.pmhlaboratoXXXXXXXXX.html"))

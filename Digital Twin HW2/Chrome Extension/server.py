@@ -135,24 +135,25 @@ def process_text():
         if not url:
             return jsonify({'error': 'URL is required'}), 400
         
-        features = extract_features(url)  # Assume this function extracts features correctly
+        # Extract features
+        features = extract_features(url)
         if features:
             extracted_features = pd.DataFrame([features])
             extracted_features.to_csv('url_features.csv', index=False)
             
-            # Pass the extracted features to the phishing detection model
+            # Phishing detection
             prediction = Phishing_Detection_Model(extracted_features)
             
-            # Return the prediction along with the features
             return jsonify({
                 'features': features,
-                'is_phishing': prediction
+                'is_phishing': bool(prediction)  # Return as True/False
             })
         else:
             return jsonify({'error': 'Failed to extract features'}), 500
     except Exception as e:
         print(f"Error: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
 
 def Phishing_Detection_Model(Extracted_DATA):
     
