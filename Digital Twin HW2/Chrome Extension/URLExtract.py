@@ -5,6 +5,8 @@ import requests
 import ssl
 import socket
 from datetime import datetime
+import joblib
+import pandas as pd
 
 def extract_features(url):
     features = {}
@@ -98,12 +100,7 @@ def extract_features(url):
     except:
         features['server_client_domain'] = 0
 
-    # SPF record
-    try:
-        spf_records = resolver.resolve(domain, 'TXT')
-        features['domain_spf'] = any('spf' in str(record).lower() for record in spf_records)
-    except:
-        features['domain_spf'] = 0
+
 
     # URL shortening detection
     shortening_services = ['bit.ly', 'tinyurl.com', 't.co', 'goo.gl']
@@ -111,5 +108,26 @@ def extract_features(url):
 
     return features
 
+URL = "http://results.pmhlaboratoXXXXXXXXX.html"
+
+Features_df = pd.DataFrame([extract_features(URL)])
+
+model = joblib.load('Random_Forest_Classifiers.pkl')
+
+def Phishing_Detection_Model(Extracted_DATA):
+    try:
+        # Ensure the DataFrame matches the input format of the model
+        prediction = model.predict(Extracted_DATA)
+        print(prediction)
+        
+        # Return True if the site is predicted as phishing (1), otherwise False
+        return bool(prediction[0])
+    except Exception as e:
+        print(f"Error in model prediction: {str(e)}")
+        return False  # Default to non-phishing in case of an error
+
+prediction = Phishing_Detection_Model(Features_df)
+
 # Example usage
-print(extract_features("https://github.com/cpennington-de/Digital_Twin_Cyber_II/pull/4"))
+print(prediction)
+#print(extract_features("http://results.pmhlaboratoXXXXXXXXX.html"))
