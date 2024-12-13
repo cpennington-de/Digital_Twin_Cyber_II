@@ -155,18 +155,6 @@ def process_text():
         return jsonify({'error': str(e)}), 500
 
 
-def Phishing_Detection_Model(Extracted_DATA):
-    
-    try:
-        # Ensure the DataFrame matches the input format of the model
-        prediction = model.predict(Extracted_DATA)
-        
-        # Return True if the site is predicted as phishing (1), otherwise False
-        return bool(prediction[0])
-    except Exception as e:
-        print(f"Error in model prediction: {str(e)}")
-        return False  # Default to non-phishing in case of an error
-
 if __name__ == '__main__':
     app.run(debug=True, port=5000)  # Runs on http://127.0.0.1:5000
 
